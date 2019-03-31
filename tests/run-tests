@@ -1,0 +1,3 @@
+source venv/bin/activate
+cd tests
+python -m test_containers --config tests.yaml
