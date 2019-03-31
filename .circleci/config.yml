@@ -1,0 +1,13 @@
+version: 2
+jobs:
+    build:
+        machine: True
+        working_directory: ~/dhcp-server
+        steps:
+          - checkout
+          - run:
+                name: install dependencies
+                command: tests/install-dependencies
+          - run:
+                name: run tests
+                command: tests/run-tests
