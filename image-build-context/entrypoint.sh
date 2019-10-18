@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ $(ps -p 1 -o comm=) != "docker-init" ]]
+if [[ $(ps -p 1 -o comm=) != "docker-init" ]] && [[ $(ps -p 1 -o comm=) != "init" ]]
 then
     echo "This container must be started with an init process."
     echo "Please use the --init flag in your run command."
