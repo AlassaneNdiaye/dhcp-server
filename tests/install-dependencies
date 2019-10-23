@@ -1,4 +1,4 @@
-sudo add-apt-repository ppa:deadsnakes/ppa -y
+sudo add-apt-repository -y ppa:deadsnakes/ppa
 sudo apt-get update
 sudo apt-get install -y nmap python3.6 python3.6-venv
 sudo setcap cap_net_raw,cap_net_admin,cap_net_bind_service+eip /usr/bin/nmap
