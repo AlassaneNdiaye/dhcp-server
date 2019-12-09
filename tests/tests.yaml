@@ -1,31 +1,33 @@
-- container:
-      name: "dhcp-server"
-      arguments:
-          auto_remove: True
-          init: True
-          network_mode: "host"
-          volumes:
-              ./test-conf:
-                  bind: "/conf"
-                  mode: "rw"
+- application:
+    name: "dhcp-server"
+    type: "docker"
+    arguments:
+      image: "dhcp-server"
+      init: True
+      network_mode: "host"
+      volumes:
+        ./test-conf:
+          bind: "/conf"
+          mode: "rw"
   tests:
-    - name: "check port 67 is listening"
-      command: "ss -ln src :67"
-      exit-code: 0
-      expected-output: ":67"
-
-    - name: "check port 68 is listening"
-      command: "ss -ln src :68"
-      exit-code: 0
-      expected-output: ":68"
-
-    - name: "check dhcp works"
-      command: "nmap --privileged --script broadcast-dhcp-discover"
-      environment-variables:
-          IP_ADDRESSES_REGEX: |
-            IP_ADDRESSES=$(hostname --all-ip-addresses)
-            IP_ADDRESSES=$(echo $IP_ADDRESSES | xargs) # remove trailing whitespace
-            IP_ADDRESSES=\(${IP_ADDRESSES// /|}\)
-            echo $IP_ADDRESSES
-      exit-code: 0
-      expected-output: "Server Identifier: ${IP_ADDRESSES_REGEX}"
+  - name: "check port 67 is listening"
+    command: "ss -ln src :67"
+    environment: "external"
+    exit-code: 0
+    expected-output: ":67"
+  - name: "check port 68 is listening"
+    command: "ss -ln src :68"
+    environment: "external"
+    exit-code: 0
+    expected-output: ":68"
+  - name: "check dhcp works"
+    command: "nmap --privileged --script broadcast-dhcp-discover"
+    environment: "external"
+    environment-variables:
+      IP_ADDRESSES_REGEX: |
+        IP_ADDRESSES=$(hostname --all-ip-addresses)
+        IP_ADDRESSES=$(echo $IP_ADDRESSES | xargs) # remove trailing whitespace
+        IP_ADDRESSES=\(${IP_ADDRESSES// /|}\)
+        echo $IP_ADDRESSES
+    exit-code: 0
+    expected-output: "Server Identifier: ${IP_ADDRESSES_REGEX}"
